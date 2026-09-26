@@ -1,0 +1,270 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f1f5f9;
+  --foreground: #0f172a;
+  --a4-width: 210mm;
+  --a4-height: 297mm;
+  --print-margin: 7mm;
+  --coupon-gap: 2mm;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), ui-sans-serif, sans-serif;
+}
+
+/* ——— Screen A4 preview ——— */
+.coupon-page-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.coupon-page-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.a4-page {
+  width: 100%;
+  max-width: 210mm;
+  aspect-ratio: 210 / 297;
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+  padding: 3%;
+  box-sizing: border-box;
+}
+
+.coupon-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 1.5%;
+  width: 100%;
+  height: 100%;
+}
+
+.coupon {
+  break-inside: avoid;
+  page-break-inside: avoid;
+  box-sizing: border-box;
+  border: 1.5px solid;
+  border-radius: 2px;
+  padding: 4%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.coupon-brand {
+  font-size: clamp(0.55rem, 1.6vw, 0.7rem);
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  line-height: 1.1;
+}
+
+.coupon-meal {
+  margin-top: 0.35em;
+  font-size: clamp(0.7rem, 2.2vw, 1.05rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: 0.02em;
+}
+
+.coupon-subtitle {
+  margin-top: 0.2em;
+  font-size: clamp(0.45rem, 1.2vw, 0.65rem);
+  font-weight: 500;
+  opacity: 0.85;
+  line-height: 1.2;
+}
+
+.coupon-diet {
+  margin-top: 0.4em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25em;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.coupon-diet-icon {
+  font-size: clamp(0.75rem, 2vw, 1.1rem);
+  line-height: 1;
+}
+
+.coupon-diet-text {
+  font-size: clamp(0.65rem, 1.9vw, 0.95rem);
+  letter-spacing: 0.04em;
+}
+
+.coupon-time {
+  margin-top: 0.3em;
+  font-size: clamp(0.45rem, 1.2vw, 0.62rem);
+  font-weight: 600;
+  opacity: 0.9;
+  line-height: 1.2;
+}
+
+.coupon-serial {
+  margin-top: 0.35em;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: clamp(0.5rem, 1.4vw, 0.72rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.print-only {
+  display: none;
+}
+
+/* ——— Print: A4 portrait, 12 coupons/page ——— */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 7mm;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    color: #000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: auto !important;
+    height: auto !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  /* Flatten layout chrome so only coupon pages remain */
+  body > div,
+  main,
+  main > div {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    gap: 0 !important;
+    background: transparent !important;
+    min-height: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  .print-root {
+    margin: 0;
+    padding: 0;
+  }
+
+  .coupon-page-wrap {
+    margin: 0;
+    padding: 0;
+  }
+
+  .a4-page {
+    width: 100%;
+    max-width: none;
+    height: auto;
+    aspect-ratio: auto;
+    min-height: 0;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0;
+    background: transparent;
+    break-after: page;
+    page-break-after: always;
+  }
+
+  .a4-page:last-child {
+    break-after: auto;
+    page-break-after: auto;
+  }
+
+  .coupon-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 2mm;
+    width: 100%;
+    /* Usable height inside @page margins ≈ 297mm - 14mm */
+    height: 283mm;
+  }
+
+  .coupon {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    border-width: 1.25pt;
+    border-radius: 0;
+    padding: 2.5mm;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .coupon-brand {
+    font-size: 8pt;
+    letter-spacing: 0.16em;
+  }
+
+  .coupon-meal {
+    margin-top: 1.5mm;
+    font-size: 13pt;
+  }
+
+  .coupon-subtitle {
+    font-size: 7pt;
+  }
+
+  .coupon-diet {
+    margin-top: 2mm;
+  }
+
+  .coupon-diet-icon {
+    font-size: 12pt;
+  }
+
+  .coupon-diet-text {
+    font-size: 12pt;
+  }
+
+  .coupon-time {
+    margin-top: 1.5mm;
+    font-size: 7.5pt;
+  }
+
+  .coupon-serial {
+    margin-top: 1.5mm;
+    font-size: 8.5pt;
+  }
+}
