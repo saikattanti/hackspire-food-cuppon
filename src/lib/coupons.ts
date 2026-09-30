@@ -1,13 +1,15 @@
 import type {
   Meal,
   GeneratedCoupon,
+  GeneratedCoffeeCoupon,
   MealSummary,
   DietKind,
+  CoffeeConfig,
 } from "./types";
 import { COUPONS_PER_PAGE } from "./types";
 
-function padSerial(n: number): string {
-  return String(n).padStart(3, "0");
+function padSerial(n: number, digits: number = 3): string {
+  return String(n).padStart(digits, "0");
 }
 
 function buildSerial(
@@ -63,13 +65,49 @@ export function generateCoupons(meals: Meal[]): GeneratedCoupon[] {
   return coupons;
 }
 
-export function chunkIntoPages(
-  coupons: GeneratedCoupon[],
+export function formatCoffeeSerial(
+  prefix: string,
+  serialNumber: number,
+  digits: number = 3,
+): string {
+  const base = prefix.trim().toUpperCase() || "COF";
+  return `${base}-${padSerial(serialNumber, digits)}`;
+}
+
+/** Generate sequential Coffee Coupons with unique non-repeating serials */
+export function generateCoffeeCoupons(config: CoffeeConfig): GeneratedCoffeeCoupon[] {
+  const coupons: GeneratedCoffeeCoupon[] = [];
+  const qty = Math.max(0, Math.floor(config.quantity));
+  const start = Math.max(0, Math.floor(config.startSerial));
+  const prefix = config.serialPrefix.trim().toUpperCase() || "COF";
+  const padDigits = Math.max(3, String(start + qty).length);
+
+  for (let i = 0; i < qty; i++) {
+    const serialNum = start + i;
+    const serial = formatCoffeeSerial(prefix, serialNum, padDigits);
+    coupons.push({
+      id: `coffee-${serialNum}-${prefix}`,
+      brandingType: config.brandingType || "NAME",
+      eventTitle: config.eventTitle || "HACKSPIRE'26",
+      customLogoUrl: config.customLogoUrl || "/hackspire-logo.svg",
+      subtitle: config.subtitle || "VALID FOR 1 COFFEE",
+      serial,
+      color: config.color || "#78350F",
+      notes: config.notes || "Single use only · Redeem at coffee counter",
+      logoUrl: config.logoUrl || "/hackspire-logo.png",
+    });
+  }
+
+  return coupons;
+}
+
+export function chunkIntoPages<T>(
+  items: T[],
   perPage: number = COUPONS_PER_PAGE,
-): GeneratedCoupon[][] {
-  const pages: GeneratedCoupon[][] = [];
-  for (let i = 0; i < coupons.length; i += perPage) {
-    pages.push(coupons.slice(i, i + perPage));
+): T[][] {
+  const pages: T[][] = [];
+  for (let i = 0; i < items.length; i += perPage) {
+    pages.push(items.slice(i, i + perPage));
   }
   return pages;
 }
@@ -102,12 +140,15 @@ export function getTotalCoupons(meals: Meal[]): number {
   return getMealSummaries(meals).reduce((sum, s) => sum + s.total, 0);
 }
 
-export function getPageCount(totalCoupons: number): number {
+export function getPageCount(
+  totalCoupons: number,
+  perPage: number = COUPONS_PER_PAGE,
+): number {
   if (totalCoupons <= 0) return 0;
-  return Math.ceil(totalCoupons / COUPONS_PER_PAGE);
+  return Math.ceil(totalCoupons / perPage);
 }
 
-/** Pick readable text color for a meal background. */
+/** Pick readable text color for a background. */
 export function getContrastingTextColor(hex: string): string {
   const cleaned = hex.replace("#", "");
   if (cleaned.length !== 6) return "#111827";

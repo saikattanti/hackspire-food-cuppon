@@ -1,4 +1,4 @@
-import type { AppState, Meal, AppSettings } from "./types";
+import type { AppState, Meal, AppSettings, CoffeeConfig, AppMode } from "./types";
 import { getDefaultState } from "./defaults";
 import { loadState, saveState } from "./storage";
 
@@ -34,6 +34,12 @@ export function getAppStoreServerSnapshot(): AppState {
   return SERVER_SNAPSHOT;
 }
 
+export function setAppModeInStore(mode: AppMode): void {
+  state = { ...state, mode };
+  saveState(state);
+  emit();
+}
+
 export function setMealsInStore(meals: Meal[]): void {
   state = { ...state, meals };
   saveState(state);
@@ -42,6 +48,12 @@ export function setMealsInStore(meals: Meal[]): void {
 
 export function setSettingsInStore(settings: AppSettings): void {
   state = { ...state, settings };
+  saveState(state);
+  emit();
+}
+
+export function setCoffeeConfigInStore(coffeeConfig: CoffeeConfig): void {
+  state = { ...state, coffeeConfig };
   saveState(state);
   emit();
 }

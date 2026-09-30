@@ -1,6 +1,10 @@
+export type AppMode = "MEALS" | "COFFEE";
+
 export type MealType = "GENERAL" | "VEG_NONVEG";
 
 export type DietKind = "GENERAL" | "VEG" | "NON_VEG";
+
+export type CoffeeBrandingType = "NAME" | "LOGO" | "NONE";
 
 export interface Meal {
   id: string;
@@ -23,9 +27,25 @@ export interface AppSettings {
   showSerialNumbers: boolean;
 }
 
+export interface CoffeeConfig {
+  quantity: number;
+  serialPrefix: string;
+  startSerial: number;
+  brandingType: CoffeeBrandingType;
+  eventTitle: string;
+  customLogoUrl?: string;
+  subtitle: string;
+  color: string;
+  showSerialNumbers: boolean;
+  notes: string;
+  logoUrl?: string;
+}
+
 export interface AppState {
+  mode: AppMode;
   meals: Meal[];
   settings: AppSettings;
+  coffeeConfig: CoffeeConfig;
 }
 
 export interface GeneratedCoupon {
@@ -39,9 +59,26 @@ export interface GeneratedCoupon {
   serial: string;
 }
 
+export interface GeneratedCoffeeCoupon {
+  id: string;
+  brandingType: CoffeeBrandingType;
+  eventTitle: string;
+  customLogoUrl?: string;
+  subtitle: string;
+  serial: string;
+  color: string;
+  notes: string;
+  logoUrl: string;
+}
+
 export interface MealValidationError {
   mealId: string;
   field?: string;
+  message: string;
+}
+
+export interface CoffeeValidationError {
+  field?: "quantity" | "serialPrefix" | "startSerial" | "eventTitle";
   message: string;
 }
 
@@ -56,5 +93,9 @@ export interface MealSummary {
 export const COUPONS_PER_PAGE = 12;
 export const PAGE_COLUMNS = 3;
 export const PAGE_ROWS = 4;
+
+export const COFFEE_COUPONS_PER_PAGE = 21;
+export const COFFEE_PAGE_COLUMNS = 3;
+export const COFFEE_PAGE_ROWS = 7;
 
 export const STORAGE_KEY = "hackspire26-food-coupons";

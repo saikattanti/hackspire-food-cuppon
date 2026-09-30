@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 80" width="100%" height="100%" fill="none">
+  <!-- HackSpire Modern Emblem (White / Light Version) -->
+  <g transform="translate(10, 8)">
+    <defs>
+      <linearGradient id="spireGradW" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#38BDF8" />
+        <stop offset="50%" stop-color="#A5B4FC" />
+        <stop offset="100%" stop-color="#E9D5FF" />
+      </linearGradient>
+    </defs>
+    
+    <!-- Background Shield / Hexagon contour -->
+    <path d="M32 4 L58 18 L58 46 L32 60 L6 46 L6 18 Z" fill="#0F172A" stroke="url(#spireGradW)" stroke-width="2.5" stroke-linejoin="round" />
+    
+    <!-- Spire / Lightning / Code glyphs -->
+    <path d="M32 10 L44 32 L34 32 L38 52 L22 28 L30 28 Z" fill="url(#spireGradW)" />
+    
+    <!-- Pulse nodes -->
+    <circle cx="32" cy="10" r="2.5" fill="#38BDF8" />
+    <circle cx="58" cy="18" r="2" fill="#A5B4FC" />
+    <circle cx="6" cy="18" r="2" fill="#A5B4FC" />
+    <circle cx="32" cy="60" r="2.5" fill="#E9D5FF" />
+  </g>
+
+  <!-- Typography: HACKSPIRE -->
+  <text x="82" y="44" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="28" letter-spacing="2" fill="#FFFFFF">
+    HACK<tspan fill="#A5B4FC">SPIRE</tspan>
+  </text>
+  
+  <!-- '26 Badge -->
+  <rect x="246" y="24" width="46" height="24" rx="6" fill="#38BDF8" />
+  <text x="269" y="41" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="14" fill="#0F172A" text-anchor="middle" letter-spacing="1">
+    &apos;26
+  </text>
+  
+  <!-- Sub-label -->
+  <text x="84" y="60" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="700" font-size="8.5" letter-spacing="3" fill="#E2E8F0">
+    OFFICIAL EVENT PASS
+  </text>
+</svg>

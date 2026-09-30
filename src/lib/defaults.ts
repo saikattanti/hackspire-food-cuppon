@@ -1,4 +1,4 @@
-import type { Meal, AppSettings, AppState } from "./types";
+import type { Meal, AppSettings, AppState, CoffeeConfig } from "./types";
 
 export function createId(): string {
   if (typeof crypto !== "undefined" && crypto.randomUUID) {
@@ -19,8 +19,6 @@ export function suggestSerialPrefix(name: string): string {
 
   if (words.length === 1) {
     const w = words[0].toUpperCase();
-    // Single-word meals: first letter (Dinner → D, Lunch → L)
-    // unless short enough to use 2 chars (Breakfast → BF)
     if (w.length <= 2) return w;
     if (w.length >= 8) return w.slice(0, 2);
     return w[0];
@@ -35,6 +33,20 @@ export function suggestSerialPrefix(name: string): string {
 
 export const DEFAULT_SETTINGS: AppSettings = {
   showSerialNumbers: true,
+};
+
+export const DEFAULT_COFFEE_CONFIG: CoffeeConfig = {
+  quantity: 120,
+  serialPrefix: "COF",
+  startSerial: 1,
+  brandingType: "NAME",
+  eventTitle: "HACKSPIRE'26",
+  customLogoUrl: "/hackspire-logo.svg",
+  subtitle: "VALID FOR 1 COFFEE",
+  color: "#78350F",
+  showSerialNumbers: true,
+  notes: "Single use only · Redeem at coffee station",
+  logoUrl: "/hackspire-logo.png",
 };
 
 export function getDefaultMeals(): Meal[] {
@@ -104,8 +116,10 @@ export function getDefaultMeals(): Meal[] {
 
 export function getDefaultState(): AppState {
   return {
+    mode: "COFFEE",
     meals: getDefaultMeals(),
     settings: { ...DEFAULT_SETTINGS },
+    coffeeConfig: { ...DEFAULT_COFFEE_CONFIG },
   };
 }
 
@@ -134,4 +148,13 @@ export const PRESET_COLORS = [
   { label: "Teal", value: "#14B8A6" },
   { label: "Pink", value: "#EC4899" },
   { label: "Slate", value: "#64748B" },
+] as const;
+
+export const COFFEE_THEMES = [
+  { label: "Warm Roast", value: "#78350F" },
+  { label: "Dark Espresso", value: "#451A03" },
+  { label: "Caramel Amber", value: "#B45309" },
+  { label: "Slate Mocha", value: "#334155" },
+  { label: "Cyber Black", value: "#0F172A" },
+  { label: "Ink Saver White", value: "#FFFFFF" },
 ] as const;

@@ -1,4 +1,4 @@
-import type { Meal, MealValidationError } from "./types";
+import type { Meal, MealValidationError, CoffeeConfig, CoffeeValidationError } from "./types";
 
 export function validateMeal(meal: Meal): MealValidationError[] {
   const errors: MealValidationError[] = [];
@@ -94,6 +94,45 @@ export function validateMeals(meals: Meal[]): MealValidationError[] {
     ];
   }
   return meals.flatMap(validateMeal);
+}
+
+export function validateCoffeeConfig(config: CoffeeConfig): CoffeeValidationError[] {
+  const errors: CoffeeValidationError[] = [];
+
+  if (!Number.isInteger(config.quantity) || config.quantity <= 0) {
+    errors.push({
+      field: "quantity",
+      message: "Quantity must be a positive integer (at least 1).",
+    });
+  } else if (config.quantity > 50000) {
+    errors.push({
+      field: "quantity",
+      message: "Quantity cannot exceed 50,000 in one batch.",
+    });
+  }
+
+  if (!config.serialPrefix.trim()) {
+    errors.push({
+      field: "serialPrefix",
+      message: "Serial prefix is required (e.g. COF).",
+    });
+  }
+
+  if (!Number.isInteger(config.startSerial) || config.startSerial < 0) {
+    errors.push({
+      field: "startSerial",
+      message: "Starting serial number must be 0 or greater.",
+    });
+  }
+
+  if (config.brandingType === "NAME" && !config.eventTitle.trim()) {
+    errors.push({
+      field: "eventTitle",
+      message: "Event title is required when Event Name mode is selected.",
+    });
+  }
+
+  return errors;
 }
 
 export function parsePositiveInt(raw: string): number | null {
